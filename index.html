@@ -1,45 +1,46 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Flower%20Reminder%22,%22short_name%22:%22Flower%20Reminder%22,%22icons%22:[{%22src%22:%22icon.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}],%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#fdf6f6%22,%22theme_color%22:%22#d63384%22}">
+    
+    <title>Bloomstall Reminders</title>
+    <meta name="apple-mobile-web-app-title" content="Bloomstall Reminders">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Bloomstall Special Day Reminders</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bloomstall%20Reminders%22,%22short_name%22:%22Bloomstall%20Reminders%22,%22icons%22:[{%22src%22:%22icon.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}],%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#f8d1c6%22,%22theme_color%22:%22#00382f%22}">
+
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8d1c6; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 380px; border: 1px solid #fce4ec; }
-        h2 { color: #00382f text-align: center; margin-bottom: 25px; font-weight: 700; }
+        h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; }
         label { font-size: 0.9em; color: #777; font-weight: 600; display: block; margin-top: 15px; }
         input, button { width: 100%; padding: 15px; margin-top: 8px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; }
         input:focus { border-color: #00382f; outline: none; background: #fffafb; }
-        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; box-shadow: 0 4px 12px rgba(214, 51, 132, 0.2); }
+        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; box-shadow: 0 4px 12px rgba(0, 56, 47, 0.2); }
         button:active { transform: scale(0.98); }
         .footer-note { font-size: 0.8em; color: #000000; text-align: center; margin-top: 20px; line-height: 1.4; }
     </style>
-<link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
 </head>
 <body>
 
 <div class="container">
-    <center><h2>CREATE A "SEND FLOWERS" REMINDER</h2></center>
+    <h2>CREATE A REMINDER</h2>
     
     <label for="eventDate">When is the big day?</label>
     <input type="date" id="eventDate">
 
-    <label for="eventNote">Who and what are we celebrating?</label>
+    <label for="eventNote">Who/What are we celebrating?</label>
     <input type="text" id="eventNote" placeholder="e.g. Mom's Birthday">
 
     <label for="daysBefore">Remind me how many days before?</label>
     <input type="number" id="daysBefore" value="5" min="1">
 
-    <label for="notes">Notes</label>
-    <input type="text" id="eventNote" placeholder="Favorite Bloomstall arrangement, favorite color, etc.">
+    <label for="extraNotes">Extra Notes (Preferences, colors, etc.)</label>
+    <input type="text" id="extraNotes" placeholder="Favorite arrangement, colors, etc.">
 
     <button onclick="generateReminder()">Add to Phone Reminders</button>
     
@@ -48,12 +49,11 @@
 
 <script>
 function generateReminder() {
-    // --- CONFIGURE YOUR WEBSITE HERE ---
     const shopUrl = "https://bloomstall.com"; 
-    // ------------------------------------
 
     const dateVal = document.getElementById('eventDate').value;
     const note = document.getElementById('eventNote').value;
+    const extra = document.getElementById('extraNotes').value;
     const daysBefore = document.getElementById('daysBefore').value;
 
     if (!dateVal || !note) {
@@ -62,6 +62,7 @@ function generateReminder() {
     }
 
     const cleanDate = dateVal.replace(/-/g, "");
+    const fullDescription = `It's almost time for ${note}!\\nNotes: ${extra}\\nTap here to order: ${shopUrl}`;
     
     const icsContent = [
         "BEGIN:VCALENDAR",
@@ -70,7 +71,7 @@ function generateReminder() {
         `DTSTART;VALUE=DATE:${cleanDate}`,
         `DTEND;VALUE=DATE:${cleanDate}`,
         `SUMMARY:Order flowers for: ${note}`,
-        `DESCRIPTION:It's almost time for ${note}! Tap the link to order flowers: ${shopUrl}`,
+        `DESCRIPTION:${fullDescription}`,
         `URL:${shopUrl}`,
         "BEGIN:VALARM",
         `TRIGGER:-P${daysBefore}D`,
