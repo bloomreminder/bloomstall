@@ -3,88 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Bloomstall Reminders</title>
+    
     <meta name="apple-mobile-web-app-title" content="Bloomstall Reminders">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Bloomstall%20Reminders%22,%22short_name%22:%22Bloomstall%20Reminders%22,%22icons%22:[{%22src%22:%22icon.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}],%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#f8d1c6%22,%22theme_color%22:%22#00382f%22}">
 
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8d1c6; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        
-        /* The Instructional Banner */
+        body { font-family: -apple-system, sans-serif; background: #f8d1c6; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; }
         #install-guide { background: #00382f; color: white; padding: 15px; text-align: center; font-size: 0.85em; width: 100%; box-sizing: border-box; display: none; border-bottom: 2px solid #f8d1c6; }
-        .share-icon { width: 18px; vertical-align: middle; margin: 0 3px; filter: invert(1); }
-
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 380px; border: 1px solid #fce4ec; margin-top: 20px; }
-        h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 380px; margin-top: 20px; border: 1px solid #fce4ec; }
+        h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; text-transform: uppercase; }
         label { font-size: 0.9em; color: #555; font-weight: 600; display: block; margin-top: 15px; }
         input, button { width: 100%; padding: 15px; margin-top: 8px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; }
-        input:focus { border-color: #00382f; outline: none; background: #fffafb; }
-        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; box-shadow: 0 4px 12px rgba(0, 56, 47, 0.2); }
-        button:active { transform: scale(0.98); }
-        .footer-note { font-size: 0.8em; color: #444; text-align: center; margin-top: 20px; line-height: 1.4; padding: 0 10px; }
+        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        .footer-note { font-size: 0.8em; color: #444; text-align: center; margin-top: 20px; line-height: 1.4; }
     </style>
 </head>
 <body>
 
 <div id="install-guide">
-    <strong>INSTALL APP:</strong> Tap the <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/IPhone_Share_Icon.png" class="share-icon"> icon and select <strong>'Add to Home Screen'</strong> to save this tool.
+    <strong>INSTALL APP:</strong> Tap the Share icon and select <strong>'Add to Home Screen'</strong> to save this tool.
 </div>
 
 <div class="container">
     <h2>Create a Reminder</h2>
-    
     <label for="eventDate">When is the big day?</label>
     <input type="date" id="eventDate">
-
     <label for="eventNote">Who/What are we celebrating?</label>
     <input type="text" id="eventNote" placeholder="e.g. Mom's Birthday">
-
     <label for="daysBefore">Remind me how many days before?</label>
-    <input type="number" id="daysBefore" value="5" min="1">
-
+    <input type="number" id="daysBefore" value="5">
     <label for="extraNotes">Extra Notes (Optional)</label>
-    <input type="text" id="extraNotes" placeholder="Arrangement style, favorite colors, etc.">
-
+    <input type="text" id="extraNotes" placeholder="Arrangement style, etc.">
     <button onclick="generateReminder()">Add to Phone Reminders</button>
-    
-    <div class="footer-note">Selecting this adds a reminder with a link to Bloomstall.com directly into your phone.</div>
+    <div class="footer-note">Adds a reminder with a link to Bloomstall.com directly to your phone.</div>
 </div>
 
 <script>
-    // Logic to show the guide only if NOT already installed on iPhone
-    if (window.navigator.standalone === false) {
-        document.getElementById('install-guide').style.display = 'block';
-    }
-    // Logic for Android Chrome
-    if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+    if (window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone)) {
         document.getElementById('install-guide').style.display = 'block';
     }
 
     function generateReminder() {
         const shopUrl = "https://bloomstall.com"; 
-
         const dateVal = document.getElementById('eventDate').value;
         const note = document.getElementById('eventNote').value;
         const extra = document.getElementById('extraNotes').value;
         const daysBefore = document.getElementById('daysBefore').value;
 
-        if (!dateVal || !note) {
-            alert("Please select a date and enter a name.");
-            return;
-        }
+        if (!dateVal || !note) { alert("Please select a date and enter a name."); return; }
 
         const cleanDate = dateVal.replace(/-/g, "");
-        
-        // Formats the notes to be readable in the calendar description
         const notesSection = extra ? `\\nNotes: ${extra}` : "";
-        const fullDescription = `It's almost time for ${note}!${notesSection}\\n\\nTap here to order from Bloomstall: ${shopUrl}`;
+        const fullDescription = `It's almost time for ${note}!${notesSection}\\n\\nOrder here: ${shopUrl}`;
         
         const icsContent = [
             "BEGIN:VCALENDAR",
@@ -113,6 +86,5 @@
         document.body.removeChild(link);
     }
 </script>
-
 </body>
 </html>
