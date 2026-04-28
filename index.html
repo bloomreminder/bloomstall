@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florist Date Reminder</title>
+    <style>
+        body { font-family: sans-serif; background: #fdf6f6; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; border: 1px solid #eee; }
+        h2 { color: #d63384; text-align: center; margin-bottom: 20px; }
+        label { font-size: 0.85em; color: #555; font-weight: bold; display: block; margin-top: 15px; }
+        input, button { width: 100%; padding: 14px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: #d63384; outline: none; box-shadow: 0 0 0 2px rgba(214, 51, 132, 0.1); }
+        button { background: #d63384; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 25px; transition: background 0.2s; }
+        button:hover { background: #b82b71; }
+        .footer-note { font-size: 0.75em; color: #888; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Flower Reminder</h2>
+    
+    <label for="eventDate">Event Date:</label>
+    <input type="date" id="eventDate">
+
+    <label for="eventNote">Who is this for?</label>
+    <input type="text" id="eventNote" placeholder="e.g. Mom's Birthday">
+
+    <label for="shopUrl">Your Shop Website:</label>
+    <input type="url" id="shopUrl" value="https://yourfloristwebsite.com" placeholder="https://yourwebsite.com">
+
+    <label for="daysBefore">Remind me (days before):</label>
+    <input type="number" id="daysBefore" value="3" min="1">
+
+    <button onclick="generateReminder()">Add to My Reminders</button>
+    
+    <div class="footer-note">This will add a reminder with a link to order flowers.</div>
+</div>
+
+<script>
+function generateReminder() {
+    const dateVal = document.getElementById('eventDate').value;
+    const note = document.getElementById('eventNote').value;
+    const shopUrl = document.getElementById('shopUrl').value;
+    const daysBefore = document.getElementById('daysBefore').value;
+
+    if (!dateVal || !note) {
+        alert("Please select a date and add a name/event.");
+        return;
+    }
+
+    // Prepare date format for ICS
+    const cleanDate = dateVal.replace(/-/g, "");
+    
+    // Create the .ics content with URL and Alarm support
+    const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "BEGIN:VEVENT",
+        `DTSTART;VALUE=DATE:${cleanDate}`,
+        `DTEND;VALUE=DATE:${cleanDate}`,
+        `SUMMARY:Order flowers for: ${note}`,
+        `DESCRIPTION:Time to order flowers for ${note}! Click the link below to visit the shop.`,
+        `URL:${shopUrl}`,
+        "BEGIN:VALARM",
+        `TRIGGER:-P${daysBefore}D`,
+        "ACTION:DISPLAY",
+        `DESCRIPTION:Reminder: Order flowers for ${note}`,
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+    ].join("\n");
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'flower-reminder.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+
+</body>
+</html>
