@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Florist Date Reminder</title>
+    <title>Bloomstall Special Day Reminders</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fdf6f6; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 380px; border: 1px solid #fce4ec; }
@@ -19,7 +19,7 @@
 <body>
 
 <div class="container">
-    <h2>Flower Reminder</h2>
+    <h2>CREATE A SEND FLOWERS REMINDER</h2>
     
     <label for="eventDate">When is the big day?</label>
     <input type="date" id="eventDate">
@@ -30,15 +30,18 @@
     <label for="daysBefore">Remind me how many days before?</label>
     <input type="number" id="daysBefore" value="3" min="1">
 
+    <label for="notes">Notes</label>
+    <input type="text" id="eventNote" placeholder="e.g. Favorite flower, favorite Bloomstall arrangement, favorite color, etc.">
+
     <button onclick="generateReminder()">Add to Phone Reminders</button>
     
-    <div class="footer-note">Selecting this adds a reminder with a link to our shop directly into your phone.</div>
+    <div class="footer-note">Selecting this adds a reminder with a link to Bloomstall.com directly into your phone.</div>
 </div>
 
 <script>
 function generateReminder() {
     // --- CONFIGURE YOUR WEBSITE HERE ---
-    const shopUrl = "https://yourfloristwebsite.com"; 
+    const shopUrl = "https://bloomstall.com"; 
     // ------------------------------------
 
     const dateVal = document.getElementById('eventDate').value;
