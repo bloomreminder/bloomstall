@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloomstall Reminders</title>
+    <title>Bloomstall Special Day Reminders</title>
     
     <meta name="apple-mobile-web-app-title" content="Bloomstall Reminders">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,17 +11,16 @@
     <link rel="apple-touch-icon" href="icon.png">
 
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f8d1c6; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Updated Banner Style */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8d1c6; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; }
         #install-guide { background: #00382f; color: white; padding: 15px; text-align: center; font-size: 0.85em; width: 100%; box-sizing: border-box; display: none; border-bottom: 2px solid #f8d1c6; line-height: 1.4; }
-        
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 380px; margin-top: 20px; border: 1px solid #fce4ec; }
-        h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; text-transform: uppercase; }
-        label { font-size: 0.9em; color: #555; font-weight: 600; display: block; margin-top: 15px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 380px; border: 1px solid #fce4ec; margin-top: 20px; }
+        h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; }
+        label { font-size: 0.9em; color: #777; font-weight: 600; display: block; margin-top: 15px; }
         input, button { width: 100%; padding: 15px; margin-top: 8px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; }
-        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; }
-        .footer-note { font-size: 0.8em; color: #444; text-align: center; margin-top: 20px; line-height: 1.4; }
+        input:focus { border-color: #00382f; outline: none; background: #fffafb; }
+        button { background: #00382f; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 30px; box-shadow: 0 4px 12px rgba(0, 56, 47, 0.2); }
+        button:active { transform: scale(0.98); }
+        .footer-note { font-size: 0.8em; color: #000000; text-align: center; margin-top: 20px; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -31,37 +30,46 @@
 </div>
 
 <div class="container">
-    <h2>Create a Reminder</h2>
+    <center><h2>CREATE A "SEND FLOWERS" REMINDER</h2></center>
+    
     <label for="eventDate">When is the big day?</label>
     <input type="date" id="eventDate">
-    <label for="eventNote">Who/What are we celebrating?</label>
+
+    <label for="eventNote">Who and what are we celebrating?</label>
     <input type="text" id="eventNote" placeholder="e.g. Mom's Birthday">
+
     <label for="daysBefore">Remind me how many days before?</label>
-    <input type="number" id="daysBefore" value="5">
-    <label for="extraNotes">Extra Notes (Optional)</label>
-    <input type="text" id="extraNotes" placeholder="Arrangement style, etc.">
+    <input type="number" id="daysBefore" value="5" min="1">
+
+    <label for="extraNotes">Notes</label>
+    <input type="text" id="extraNotes" placeholder="Favorite Bloomstall arrangement, favorite color, etc.">
+
     <button onclick="generateReminder()">Add to Phone Reminders</button>
-    <div class="footer-note">Adds a reminder with a link to Bloomstall.com directly to your phone.</div>
+    
+    <div class="footer-note">Selecting this adds a reminder with a link to Bloomstall.com directly into your phone.</div>
 </div>
 
 <script>
-    // Show banner if not in standalone mode
     if (window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone)) {
         document.getElementById('install-guide').style.display = 'block';
     }
 
     function generateReminder() {
         const shopUrl = "https://bloomstall.com"; 
+
         const dateVal = document.getElementById('eventDate').value;
         const note = document.getElementById('eventNote').value;
         const extra = document.getElementById('extraNotes').value;
         const daysBefore = document.getElementById('daysBefore').value;
 
-        if (!dateVal || !note) { alert("Please select a date and enter a name."); return; }
+        if (!dateVal || !note) {
+            alert("Please select a date and enter a name.");
+            return;
+        }
 
         const cleanDate = dateVal.replace(/-/g, "");
         const notesSection = extra ? `\\nNotes: ${extra}` : "";
-        const fullDescription = `It's almost time for ${note}!${notesSection}\\n\\nOrder here: ${shopUrl}`;
+        const fullDescription = `It's almost time for ${note}!${notesSection}\\n\\nTap here to order from Bloomstall: ${shopUrl}`;
         
         const icsContent = [
             "BEGIN:VCALENDAR",
@@ -90,5 +98,6 @@
         document.body.removeChild(link);
     }
 </script>
+
 </body>
 </html>
