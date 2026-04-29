@@ -12,7 +12,10 @@
 
     <style>
         body { font-family: -apple-system, sans-serif; background: #f8d1c6; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        #install-guide { background: #00382f; color: white; padding: 15px; text-align: center; font-size: 0.85em; width: 100%; box-sizing: border-box; display: none; border-bottom: 2px solid #f8d1c6; }
+        
+        /* Updated Banner Style */
+        #install-guide { background: #00382f; color: white; padding: 15px; text-align: center; font-size: 0.85em; width: 100%; box-sizing: border-box; display: none; border-bottom: 2px solid #f8d1c6; line-height: 1.4; }
+        
         .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; max-width: 380px; margin-top: 20px; border: 1px solid #fce4ec; }
         h2 { color: #00382f; text-align: center; margin-bottom: 25px; font-weight: 700; text-transform: uppercase; }
         label { font-size: 0.9em; color: #555; font-weight: 600; display: block; margin-top: 15px; }
@@ -24,7 +27,7 @@
 <body>
 
 <div id="install-guide">
-    <strong>INSTALL APP:</strong> Tap the Share icon and select <strong>'Add to Home Screen'</strong> to save this tool.
+    <strong>INSTALL ON YOUR PHONE:</strong> Tap the SHARE icon [↑] and select <strong>'Add to Home Screen'</strong> to save this tool.
 </div>
 
 <div class="container">
@@ -42,6 +45,7 @@
 </div>
 
 <script>
+    // Show banner if not in standalone mode
     if (window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone)) {
         document.getElementById('install-guide').style.display = 'block';
     }
