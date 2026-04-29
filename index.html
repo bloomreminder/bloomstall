@@ -30,6 +30,7 @@
 
 <div id="install-guide">
     <strong>INSTALL ON YOUR PHONE:</strong> Tap the SHARE icon [↑] from Safari and select <strong>'Add to Home Screen'</strong> to save this tool.
+When you use the form it will add the event, plus a lock screen notification, to your CALENDAR app.  You must have notifications turned on for the CALENDAR app to see the reminder!
 </div>
 
 <div class="container">
@@ -71,7 +72,7 @@
 
         const cleanDate = dateVal.replace(/-/g, "");
         const notesSection = extra ? `\\nNotes: ${extra}` : "";
-        const fullDescription = `It's almost time for ${note}!${notesSection}\\n\\nTap here to order from Bloomstall: ${shopUrl}`;
+        const fullDescription = `Don't forget the flowers! ${note}!${notesSection}\\n\\nOrder now ${shopUrl}`;
         
         const icsContent = [
             "BEGIN:VCALENDAR",
