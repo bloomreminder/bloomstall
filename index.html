@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Bloomstall">
@@ -19,16 +19,24 @@
             --bloom-grey: #f4f4f4;
         }
 
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bloom-white);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
             color: var(--bloom-black);
+            touch-action: manipulation;
         }
 
         .container {
@@ -41,6 +49,7 @@
             max-width: 100%;
             height: auto;
             margin-bottom: 20px;
+            pointer-events: none;
         }
 
         /* Exact Modal Overlay & Window Styles */
@@ -199,7 +208,6 @@
 
         <!-- Send a Hint -->
         <a href="sms:&body=Just a little hint... I'd love some flowers from Bloomstall! Check them out here: https://www.bloomstall.com" class="btn">SEND A HINT</a>
-    </div>
 
         <!-- Leave Us a Review -->
         <a href="https://g.page/r/CcHN9ZEXa0tQEBM/review" class="btn">LEAVE US A REVIEW</a>
@@ -214,24 +222,16 @@
     const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isStandalone) {
+        // Hide the instruction trigger when running as an installed app
         const installBtn = document.querySelector('.help-trigger');
         if (installBtn) {
             installBtn.style.display = 'none';
         }
-        // Remember that the user has installed it
-        localStorage.setItem('bloomstall_was_installed', 'true');
-        // Clear the dismissal flag so it's ready to pop up again if deleted
-        localStorage.removeItem('bloomstall_install_prompt_shown');
+        // Clear out any dismissal flags so that if it's deleted and reopened in browser, it triggers fresh
+        localStorage.removeItem('bloomstall_prompt_dismissed');
     } else {
-        // If it was previously installed but is now running in the browser, 
-        // it means the shortcut was deleted. Reset the prompt state.
-        if (localStorage.getItem('bloomstall_was_installed') === 'true') {
-            localStorage.removeItem('bloomstall_install_prompt_shown');
-            localStorage.removeItem('bloomstall_was_installed');
-        }
-
-        // Only show automatically if it hasn't been dismissed/seen before
-        if (!localStorage.getItem('bloomstall_install_prompt_shown')) {
+        // If opened in browser and user hasn't dismissed it in this browser cycle, pop it up
+        if (!localStorage.getItem('bloomstall_prompt_dismissed')) {
             toggleModal(true);
         }
     }
@@ -239,17 +239,12 @@
     function toggleModal(show) {
         document.getElementById('installModal').style.display = show ? 'flex' : 'none';
         
-        // When the modal is closed, save to localStorage so it doesn't pop up again this session
+        // If they close/dismiss the modal in the browser, remember it for this browser session
         if (!show) {
-            localStorage.setItem('bloomstall_install_prompt_shown', 'true');
+            localStorage.setItem('bloomstall_prompt_dismissed', 'true');
         }
     }
 </script>
 
 </body>
 </html>
-
-
-
-
-
