@@ -198,12 +198,10 @@
         <a href="https://www.bloomstall.com/pages/special-days-to-send-flowers-calendar" class="btn">SPECIAL DAYS CALENDAR</a>
 
         <!-- Send a Hint -->
-        <a href="sms:&body=Just a little hint... I'd love some flowers from Bloomstall! Check them out here: https://www.bloomstall.com" class="btn">SEND A HINT</a>
+        <a href="https://www.bloomstall.com" class="btn">SEND A HINT</a>
 
         <!-- Leave Us a Review -->
         <a href="https://g.page/r/CcHN9ZEXa0tQEBM/review" class="btn">LEAVE US A REVIEW</a>
-
-
     </div>
 
     <div class="footer-text">
@@ -212,20 +210,35 @@
 </div>
 
 <script>
-    const isStandalone = window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone);
+    // Check if running in standalone mode (already installed/bookmarked)
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
     if (isStandalone) {
         const installBtn = document.querySelector('.help-trigger');
         if (installBtn) {
             installBtn.style.display = 'none';
         }
     } else {
-        toggleModal(true);
+        // Only show automatically if it hasn't been dismissed/seen before in localStorage
+        if (!localStorage.getItem('bloomstall_install_prompt_shown')) {
+            toggleModal(true);
+        }
     }
 
     function toggleModal(show) {
         document.getElementById('installModal').style.display = show ? 'flex' : 'none';
+        
+        // When the modal is closed, save to localStorage so it doesn't pop up again
+        if (!show) {
+            localStorage.setItem('bloomstall_install_prompt_shown', 'true');
+        }
     }
 </script>
 
 </body>
 </html>
+
+
+
+
+
