@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bloomstall">
+    
     <title>Bloomstall Reminders & Shop</title>
+    
+    <link rel="icon" type="image/png" href="https://bloomreminder.github.io/bloomstall/icon.png">
+    <link rel="apple-touch-icon" href="https://bloomreminder.github.io/bloomstall/icon.png">
+
     <style>
         :root {
-            --bloom-black: #1a1a1a;
+            --bloom-black: #00382f;
             --bloom-white: #ffffff;
             --bloom-grey: #f4f4f4;
         }
@@ -29,16 +37,13 @@
             text-align: center;
         }
 
-        h1 {
-            font-family: "Times New Roman", Times, serif;
-            font-weight: normal;
-            font-size: 26px;
-            letter-spacing: 2px;
+        .logo-img {
+            max-width: 100%;
+            height: auto;
             margin-bottom: 20px;
-            text-transform: uppercase;
         }
 
-        /* Exact Modal Overlay & Window Styles from your file */
+        /* Exact Modal Overlay & Window Styles */
         .modal-overlay { 
             position: fixed; 
             top: 0; 
@@ -150,31 +155,28 @@
 </head>
 <body>
 
-<!-- Exact Install Guide Modal Window from your file -->
+<!-- Exact Install Guide Modal Window -->
 <div id="installModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-btn" onclick="toggleModal(false)">&times;</button>
         <h3>INSTALL THE BLOOMSTALL APP ON YOUR iPHONE</h3>
 
-<p>1. Press the <strong>THREE DOTS</strong> at the bottom
-right of your screen. (In Safari)</p>
+        <p>1. Press the <strong>THREE DOTS</strong> at the bottom right of your screen. (In Safari)[cite: 1]</p>
 
-<p>2. Press <strong>SHARE</strong>.</p>
+        <p>2. Press <strong>SHARE</strong>.</p>
 
-<p>3. Swipe <strong>UP</strong> to show the full SHARE screen.</p>
+        <p>3. Swipe <strong>UP</strong> to show the full SHARE screen.</p>
 
-<p>4. Press <strong>ADD TO HOME SCREEN</strong>.</p>
+        <p>4. Press <strong>ADD TO HOME SCREEN</strong>.</p>
 
-<p>The Bloomstall app icon will be added
-to the last page of your home screen.
-(We suggest moving it to the first!) ~ ;)</p>
+        <p>The Bloomstall app icon will be added to the last page of your home screen. (We suggest moving it to the first!) ~ ;)</p>
 
         <button class="btn" style="margin-top:20px; background:#f8d1c6; color:#00382f; border:none; width:100%;" onclick="toggleModal(false)">Got It</button>
     </div>
 </div>
 
 <div class="container">
-    <h1>Bloomstall</h1>
+    <a href="https://www.bloomstall.com"><img src="bloomstalllogo.png" alt="Bloomstall Flowers & Plants" class="logo-img"></a>
 
     <!-- Button to trigger the exact install instructions window -->
     <button class="help-trigger" onclick="toggleModal(true)">📱 iPhone Install Instructions</button>
@@ -195,8 +197,13 @@ to the last page of your home screen.
         <!-- Special Days Calendar -->
         <a href="https://www.bloomstall.com/pages/special-days-to-send-flowers-calendar" class="btn">SPECIAL DAYS CALENDAR</a>
 
+        <!-- Send a Hint -->
+        <a href="sms:&body=Just a little hint... I'd love some flowers from Bloomstall! Check them out here: https://www.bloomstall.com" class="btn">SEND A HINT</a>
+
         <!-- Leave Us a Review -->
         <a href="https://g.page/r/CcHN9ZEXa0tQEBM/review" class="btn">LEAVE US A REVIEW</a>
+
+
     </div>
 
     <div class="footer-text">
@@ -205,9 +212,13 @@ to the last page of your home screen.
 </div>
 
 <script>
-    // Show modal automatically if not running in standalone PWA mode (pulled from your test file logic)
     const isStandalone = window.navigator.standalone === false || (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone);
     if (isStandalone) {
+        const installBtn = document.querySelector('.help-trigger');
+        if (installBtn) {
+            installBtn.style.display = 'none';
+        }
+    } else {
         toggleModal(true);
     }
 
