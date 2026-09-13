@@ -210,7 +210,6 @@
 </div>
 
 <script>
-    // Check if running in standalone mode (already installed/bookmarked)
     const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isStandalone) {
@@ -218,8 +217,19 @@
         if (installBtn) {
             installBtn.style.display = 'none';
         }
+        // Remember that the user has installed it
+        localStorage.setItem('bloomstall_was_installed', 'true');
+        // Clear the dismissal flag so it's ready to pop up again if deleted
+        localStorage.removeItem('bloomstall_install_prompt_shown');
     } else {
-        // Only show automatically if it hasn't been dismissed/seen before in localStorage
+        // If it was previously installed but is now running in the browser, 
+        // it means the shortcut was deleted. Reset the prompt state.
+        if (localStorage.getItem('bloomstall_was_installed') === 'true') {
+            localStorage.removeItem('bloomstall_install_prompt_shown');
+            localStorage.removeItem('bloomstall_was_installed');
+        }
+
+        // Only show automatically if it hasn't been dismissed/seen before
         if (!localStorage.getItem('bloomstall_install_prompt_shown')) {
             toggleModal(true);
         }
@@ -228,7 +238,7 @@
     function toggleModal(show) {
         document.getElementById('installModal').style.display = show ? 'flex' : 'none';
         
-        // When the modal is closed, save to localStorage so it doesn't pop up again
+        // When the modal is closed, save to localStorage so it doesn't pop up again this session
         if (!show) {
             localStorage.setItem('bloomstall_install_prompt_shown', 'true');
         }
